@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiển thị sản phẩm</title>
+    <script src="js/gio_hang.js"></script>
+    <script src="js/ass.js"></script>
+    <link rel="stylesheet" href="css/hien-thi-sp.css">
+</head>
+
+<body>
+
+    <div class="gio-hang" id="gio-hang">
+        <div class="item-gio-hang tieuDeItemGioHang">
+            <div class="hinhAnh"></div>
+            <p class="ten">Sản phẩm</p>
+            <div class="gia">Đơn giá</div>
+            <p class="soLuong">Số lượng</p>
+            <p class="thanhTien"></p>
+            <p class="thaoTac">Thao tác</p>
+        </div>
+    </div>
+    <script>
+        hienThiDanhSachItemGioHang();
+        function hienThiDanhSachItemGioHang() {
+            var danhSachItemGioHang = layGioHangTuLocalStorage();
+
+            var HTML = chuyenDanhSachItemGioHangSangHTML(danhSachItemGioHang);
+
+            var nodeGioHang = document.getElementById('gio-hang');
+            nodeGioHang.innerHTML = nodeGioHang.innerHTML + HTML;
+        }
+
+
+        function chuyenDanhSachItemGioHangSangHTML(danhSachItemGioHang) {
+            var htmlTong = '';
+            for (var i = 0; i < danhSachItemGioHang.length; i++) {
+                htmlTong = htmlTong + chuyenDoiTuongItemGioHangSangHTML(danhSachItemGioHang[i]);
+            }
+            return htmlTong;
+        }
+        function chuyenDoiTuongItemGioHangSangHTML(itemGioHang) {
+            var sanPham = laySanPhamTheoID(itemGioHang.idSanPham);
+
+            var thanhTien = itemGioHang.soLuong * sanPham.giaGoc;
+            var html = '       <div class="gio-hang">  ' +
+                '           <div class="item-gio-hang">  ' +
+                '               <div class="hinhAnh">  ' +
+                '                   <img src="' + sanPham.hinhAnh + '">  ' +
+                '               </div>  ' +
+                '               <p class="ten">' + sanPham.ten + '</p>  ' +
+                '               <div class="gia">  ' +
+                '                   <span class="giaGoc">' + sanPham.giaGoc + 'đ</span>  ' +
+                '               </div>  ' +
+                '               <input type="number" class="soLuong" value="' + itemGioHang.soLuong + '">  ' +
+                '               <p class="thanhTien">' + thanhTien + "đ" + '</p>  ' +
+                '               <div class="hanhDong">  ' +
+                '                   <button onclick="onClickRemoveSanPham()"><img src"images/sanpham/delete.png"></button>  ' +
+
+                '               </div>  ' +
+                '           </div>  ' +
+                '      </div>  ';
+            return html;
+
+        }
+        function onClickRemoveSanPham(idSanPham) {
+            var danhSachSanPham1 = layDanhSachSanPhamTuLocalStorage();
+            var danhSachSanPham1 = document.getElementsByClassName('hanhDong');
+            for (var i = 0; i < danhSachSanPham1.length; i++) {
+
+                var buttonde = danhSachSanPham1[i];
+
+                buttonde.addEventListener('click', function () {
+
+                    var buttonClicked = event.target;
+                    buttonClicked.parentElement.parentElement.remove(danhSachSanPham1);
+                    capnhatTongtien();
+                });
+
+            }
+            luuGioHangXuongLocalStorage(danhSachSanPham1);
+        }
+    </script>
+</body>
+
+</html>
